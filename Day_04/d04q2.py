@@ -12,7 +12,7 @@ for i in pairs:
     lh = int(left[left.index('-') + 1:])
     rl = int(right[:right.index('-')])
     rh = int(right[right.index('-') + 1:])
-    if ((rh <= lh) and (rh >= ll)) or ((lh <= rh) and (lh >= rl)):
+    if (ll <= rh) and (rl <= lh):
         total += 1
 
 print(total)
