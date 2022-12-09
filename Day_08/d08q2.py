@@ -5,54 +5,29 @@ fileName = input('Input:\n')
 with open(fileName, 'r') as f:
     lines = f.readlines()
 
-trees = list()
+trees = np.zeros((len(lines), len(lines[0]) - 1))
 
-y = 0
+for i in range(len(lines)):
+    for c in range(len(lines[0]) - 1):
+        trees[i, c] = int(lines[i][c])
 
-for i in lines:
-    trees.append(list())
-    for c in i:
-        if c == '\n':
-            break
-        trees[y].append(int(c))
-    y += 1
-
-mostScenic = 0
-
-y = 1
-h = len(trees)
-w = len(trees[0])
-while y < h - 1:
-    x = 1
-    while x < w - 1:
-        height = trees[y][x]
-        north = 0
-        south = 0
-        west = 0
-        east = 0
-        check = y - 1
-        while check >= 0:
-            north += 1
-            if trees[check][x] >= height: break
-            check -= 1
-        check = y + 1
-        while check < h:
-            south += 1
-            if trees[check][x] >= height: break
-            check += 1
-        check = x - 1
-        while check >= 0:
-            west += 1
-            if trees[y][check] >= height: break
-            check -= 1
-        check = x + 1
-        while check < w:
-            east += 1
-            if trees[y][check] >= height: break
-            check += 1
-        score = north * south * west * east
-        if score > mostScenic: mostScenic = score
-        x += 1
-    y += 1
-
-print(mostScenic)
+maxScenic = 0
+h, w = np.shape(trees)
+for y in range(1, h - 1):
+    for x in range(1, w - 1):
+        height = trees[y, x]
+        score = np.zeros(4)
+        for i in range(y-1, -1, -1):
+            score[0] += 1
+            if trees[i, x] >= height: break
+        for i in range(y+1, h):
+            score[1] += 1
+            if trees[i, x] >= height: break
+        for i in range(x-1, -1, -1):
+            score[2] += 1
+            if trees[y, i] >= height: break
+        for i in range(x+1, w):
+            score[3] += 1
+            if trees[y, i] >= height: break
+        if np.product(score) > maxScenic: maxScenic = np.product(score)
+print(maxScenic)
